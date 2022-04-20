@@ -17,13 +17,27 @@ class Level {
   this.startActors = []; // creates an array of objects that will hold elements that move on screan 
   this.rows = rows.map((row, y) =>{
    return row.map((ch, x) => {
-    let type = levelChars[ch];
+    let type = levelChars[ch]; //determines if a specific character will translate into a static background piece or get pushed into the startActors array for moving parts
     if (typeof type == "string") return type;
     this.startActors.push(
      type.create(new Vec(x, y), ch));
      return "empty";
    });
   });
+ }
+}
+
+class State { // this keeps track of the state of a running game so events like actors disappearing and player movement will be tracked by this class
+ constructor(level, actors, status){
+  this.level = level;
+  this.actors = actors;
+  this.status = status
+ }
+ static start(level){
+  return new State(level, level.startActors, "playing");
+ }
+ get player(){
+  return this.actors.find(a => a.type == 'player')
  }
 }
 
